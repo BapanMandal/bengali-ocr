@@ -5,6 +5,19 @@ if (!requireNamespace("pdftools", quietly = TRUE)) {
 
 library(pdftools)
 
+# Get command line arguments
+args <- commandArgs(trailingOnly = TRUE)
+
+# Check if any arguments were provided
+if (length(args) == 0) {
+  cat("No arguments provided.\n")
+} else {
+  cat("Arguments provided:\n")
+  for (arg in args) {
+    cat("- ", arg, "\n")
+  }
+}
+
 # Function to split PDF into fixed ranges
 split_pdf_by_ranges <- function(input_pdf, output_dir, page_length = 50) {
   pdf_info <- pdf_info(input_pdf)
@@ -32,7 +45,7 @@ split_pdf_by_ranges <- function(input_pdf, output_dir, page_length = 50) {
   }
 }
 
-input_pdf_file <- "compiler_book.pdf"
-output_directory <- "output_pdfs"
+input_pdf_file <- args
+output_directory <- "split_pdfs"
 
 split_pdf_by_ranges(input_pdf_file, output_directory)
