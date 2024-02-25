@@ -42,7 +42,7 @@ def main():
     process.wait()
 
     # The output of the R script is in the split_pdfs folder
-    split_pdfs_dir = 'split_pdfs'
+    split_pdfs_dir = 'split_pdfs/'
 
     # ==========================================================================
 
@@ -81,7 +81,7 @@ def main():
         print(f'Number of pages OCRed: {len(content)}\n')
 
         # Save the OCR outputs to a text file
-        with open(args.output+f'{pdf_filename[:-4]}.txt', 'w', encoding="utf-8") as f:
+        with open(ocr_outputs+f'{pdf_filename[:-4]}.txt', 'w', encoding="utf-8") as f:
             for i in range(len(content)):
                 f.write(content[i]['text'])
                 f.write("\n")
