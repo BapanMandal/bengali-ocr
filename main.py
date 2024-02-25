@@ -21,7 +21,7 @@ def main():
     parser.add_argument('input', help='Path to the input PDF file')
 
     # defining options for parser object
-    parser.add_argument('-o', '--output', default='ocr_outputs', help='Nmae of the output folder where OCR outputs will be saved. (Default: "ocr_outputs")')
+    parser.add_argument('-o', '--output', default='ocr_outputs', help='Name of the output folder where OCR outputs will be saved. (Default: "ocr_outputs")')
 
     # parse the arguments from standard input
     args = parser.parse_args()
@@ -35,7 +35,7 @@ def main():
     # ================== Split the PDF into chunks of 50 pages =================
 
     # Construct the command to run the R script
-    command = ["Rscript", './split_pdf.r', args.input]
+    command = ["sudo", "Rscript", './split_pdf.r', args.input]
 
     # Run the command and capture the output
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
