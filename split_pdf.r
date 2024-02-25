@@ -9,7 +9,11 @@ args <- commandArgs(trailingOnly = TRUE)
 
 
 # Function to split PDF into fixed ranges
-split_pdf_by_ranges <- function(input_pdf_path, output_dir, pdf_subset_max_len = 50) {
+split_pdf_by_ranges <- function(
+  input_pdf_path,
+  output_dir,
+  pdf_subset_max_len = 50
+) {
   # Get the total number of pages in the PDF
   pdf_info <- pdf_info(input_pdf_path)
   total_pages <- pdf_info[["pages"]]
@@ -32,7 +36,7 @@ split_pdf_by_ranges <- function(input_pdf_path, output_dir, pdf_subset_max_len =
       output = output_file
     )
 
-    cat("Created: ", output_file, "\n")
+    cat("\tCreated: ", output_file, "\n")
   }
 
 }
@@ -42,4 +46,6 @@ split_pdf_by_ranges <- function(input_pdf_path, output_dir, pdf_subset_max_len =
 input_pdf_file <- args
 output_directory <- "split_pdfs"
 
+cat("\nSplitting the PDF into fixed ranges...\n")
 split_pdf_by_ranges(input_pdf_file, output_directory)
+cat("Done!\n\n")

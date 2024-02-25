@@ -38,7 +38,7 @@ def main():
     command = ["sudo", "Rscript", './split_pdf.r', args.input]
 
     # Run the command and capture the output
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process = subprocess.Popen(command, stderr=subprocess.PIPE)
     process.wait()
 
     # The output of the R script is in the split_pdfs folder
@@ -59,7 +59,10 @@ def main():
     try:
         os.mkdir(ocr_outputs)
     except FileExistsError:
-        shutil.rmtree(ocr_outputs)
+        try:
+            subprocess.run(['sudo', 'rm', '-rf', ocr_outputs], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error: {e}")
         os.mkdir(ocr_outputs)
 
 
@@ -71,6 +74,8 @@ def main():
             document_path = split_pdfs_dir+pdf_filename,
             language = 'Bengali'
         )
+
+        print(f'Processing PDF {pg_cnt+1} of {len(split_pdfs)}: {pdf_filename} ...')
 
         # extract text from the document
         pdf2text = PDF2Text(document=pdf_document)
@@ -87,9 +92,12 @@ def main():
                 f.write("\n")
 
     # Remove the split PDFs
-    shutil.rmtree('split_pdfs')
+    try:
+        subprocess.run(['sudo', 'rm', '-rf', 'split_pdfs/'], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
 
-    print(f'\n>> All OCR outputs saved to the folder: {args.output}')
+    print(f'>> All OCR outputs saved to the folder: {args.output}\n')
 
 
 
