@@ -1,34 +1,25 @@
-# Install and load the pdftools package
-if (!requireNamespace("pdftools", quietly = TRUE)) {
-  install.packages("pdftools")
-}
-
+# import the required libraries
 library(pdftools)
+
+
 
 # Get command line arguments
 args <- commandArgs(trailingOnly = TRUE)
 
-# Check if any arguments were provided
-if (length(args) == 0) {
-  cat("No arguments provided.\n")
-} else {
-  cat("Arguments provided:\n")
-  for (arg in args) {
-    cat("- ", arg, "\n")
-  }
-}
+
 
 # Function to split PDF into fixed ranges
-split_pdf_by_ranges <- function(input_pdf, output_dir, page_length = 50) {
-  pdf_info <- pdf_info(input_pdf)
+split_pdf_by_ranges <- function(input_pdf_path, output_dir, pdf_subset_max_len = 50) {
+  # Get the total number of pages in the PDF
+  pdf_info <- pdf_info(input_pdf_path)
   total_pages <- pdf_info[["pages"]]
 
   # Create the output directory if it doesn't exist
   dir.create(output_dir, showWarnings = FALSE)
 
   # Split the PDF into fixed ranges
-  for (start_page in seq(1, total_pages, by = page_length)) {
-    end_page <- min(start_page + page_length - 1, total_pages)
+  for (start_page in seq(1, total_pages, by = pdf_subset_max_len)) {
+    end_page <- min(start_page + pdf_subset_max_len - 1, total_pages)
 
     output_file <- file.path(
       output_dir,
@@ -36,14 +27,17 @@ split_pdf_by_ranges <- function(input_pdf, output_dir, page_length = 50) {
     )
 
     pdf_subset(
-      input_pdf,
+      input_pdf_path,
       pages = start_page:end_page,
       output = output_file
     )
 
     cat("Created: ", output_file, "\n")
   }
+
 }
+
+
 
 input_pdf_file <- args
 output_directory <- "split_pdfs"
